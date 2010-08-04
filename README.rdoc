@@ -1,0 +1,79 @@
+== RabidPrawns - Document Helpers
+
+RabidPrawns is a simple library that loads some helpers into Prawn::Document for page layouts. Currently
+two "rabids" are available to load into Prawn::Document. These helper methods should work on most versions
+of Prawn and have been somewhat tested on versions starting at 0.6.3 through 0.8.4. If you find any bugs,
+please create an issue on the github site.
+
+== Loading Rabids
+
+Loading rabids into the prawn document is easy:
+
+  require 'rubygems'
+  require 'rabidprawns'
+  
+  RabidPrawns.load_rabid :columned_page
+  
+That's it. Your next Prawn::Document instance will have a Prawn::Document#columned_page method for writing out columned pages. 
+
+== Available Rabids
+
+Currently, there are only two rabids available. To get a list of available rabids:
+
+  require 'rubygems'
+  require 'rabidprawns'
+  
+  puts RabidPrawns.available_rabids
+  
+=== Columned Page
+
+The columned page rabid will provide a Prawn::Document#columned_page method. It takes the text for the pages, the title to use
+for the pages and some options for how things should be laid out. If the content fills the page, it will automatically
+move to the next page, reprint the title and continue printing the content. Here's a simple example script you
+can run:
+
+  require 'rubygems'
+  require 'rabidprawns'
+  
+  RabidPrawns.load_rabid :columned_page
+  doc = Prawn::Document.new
+  doc.columned_page('this is some text to print ' * 1000, 'This is the title', :columns => 3, :title_colspan => 2)
+  output = File.open('example.pdf', 'w+')
+  output.write doc.render
+  output.close
+  puts 'Example complete'
+  
+There are a few options available. Take a look at the docs for a complete listing.
+
+=== Simple Tables
+
+This rabid will provide a Prawn::Document#simple_tables method for printing tables. The idea is simple. Provide an array of table structures
+in an array, with any desired options, and print the tables on the page. Simple tables will properly break at the end of a page,
+accounting for margin restrictions, and start a new page, with table title and headings. Here is a simple example:
+
+  require 'rubygems'
+  require 'rabidprawns'
+
+  RabidPrawns.load_rabid :simple_tables
+
+  a = Prawn::Document.new
+  tables = [
+    {
+      :title => 'thing',
+      :contents=> [
+        {
+          :headings => ["one", "two", "three", "four"], 
+          :rows=>[[1, 2, 3, 4], [{:color => [100, 0, 0, 0], :background_color => [0, 100, 0, 0], :content => "this"}, "is", "working", "hopefully"], [nil, 'a', 'b', 'c']]
+        }
+      ]
+    }
+  ]
+  a.simple_tables tables
+  f = File.open('example.pdf', 'w+')
+  f.write a.render
+  f.close
+  puts 'Example complete'
+  
+Simple tables has a few nice features, like dynamically changing column numbers within a table (this is why :contents is an Array), applying scoped options at various
+points during table construction, automatically sizing the table to fit within constraints, printing title and/or headings on new pages and much more. For a longer
+explanation of features, and available options, take a look at the RDoc for the #simple_tables method.
