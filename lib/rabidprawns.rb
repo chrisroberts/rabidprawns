@@ -26,13 +26,15 @@ class RabidPrawns
   end
 end
 
-module Prawn
-class Document
-  def height_of(text, args)
-    unless(args.is_a?(Hash))
-      args = {:width => args}
+if(Prawn::VERSION > '0.6')
+  module Prawn
+  class Document
+    def height_of(text, args)
+      unless(args.is_a?(Hash))
+        args = {:width => args}
+      end
+      super(text, args)
     end
-    super(text, args)
   end
-end
+  end
 end
