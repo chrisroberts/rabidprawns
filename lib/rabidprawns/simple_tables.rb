@@ -6,7 +6,7 @@ unless([].respond_to?(:sum))
   end
 end
 
-module Prawn
+module RabidPrawns
 class Document
   # tables:: Array of tables
   # options:: Table options

@@ -1,6 +1,6 @@
 require 'prawn'
 
-class RabidPrawns
+module RabidPrawns
   class << self
     # Returns array of available rabids for loading
     def available_rabids
@@ -26,8 +26,13 @@ class RabidPrawns
   end
 end
 
+module RabidPrawns
+  class Document < Prawn::Document
+  end
+end
+
 if(Prawn::VERSION > '0.6')
-  module Prawn
+  module RabidPrawns
   class Document
     def height_of(text, args)
       unless(args.is_a?(Hash))

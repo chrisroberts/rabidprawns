@@ -1,4 +1,4 @@
-module Prawn
+module RabidPrawns
 class Document
   # text:: Text to print
   # title:: Title of page
